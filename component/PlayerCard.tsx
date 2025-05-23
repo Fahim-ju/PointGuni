@@ -26,7 +26,7 @@ const avatarMap: Record<string, any> = {
 const PlayerCard: React.FC<PlayerCardProps> = ({ name, totalPoints, lastPoint, avatarName }) => {
   return (
     <ImageBackground
-      source={require(`../assets/AppBgImage.jpg`)} // Add a dynamic, stylish background
+      source={require(`../assets/blackcards.jpg`)} // Add a dynamic, stylish background
       style={styles.card}
       imageStyle={styles.cardImage}
     >
@@ -53,9 +53,11 @@ const styles = StyleSheet.create({
     width: cardWidth,
     height: 250,
     borderRadius: 16,
+    borderWidth: .5,
+    borderColor: "white",
     overflow: "hidden",
     elevation: 5,
-    shadowColor: "#000",
+    shadowColor: "white",
     shadowOpacity: 0.2,
     shadowRadius: 10,
     shadowOffset: { width: 0, height: 4 },
@@ -73,6 +75,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderWidth: 2,
     borderColor: "#fff",
+    shadowOpacity: 0.2,
     marginBottom: 8,
   },
   name: {

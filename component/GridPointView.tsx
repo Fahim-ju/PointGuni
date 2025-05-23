@@ -6,10 +6,10 @@ const screenWidth = Dimensions.get("window").width;
 const cardWidth = screenWidth / 2 - 30;
 
 const players = [
-  { name: "Alice", totalPoints: 120, lastPoint: 10, avatarName: "user1" },
-  { name: "Bob", totalPoints: 95, lastPoint: 20, avatarName: "user2" },
-  { name: "Charlie", totalPoints: 110, lastPoint: 5, avatarName: "user3" },
-  { name: "Diana", totalPoints: 85, lastPoint: 15, avatarName: "user4" },
+  { name: "Hannan", totalPoints: 120, lastPoint: 10, avatarName: "user1" },
+  { name: "Rijvy", totalPoints: 95, lastPoint: 20, avatarName: "user2" },
+  { name: "Anowar", totalPoints: 110, lastPoint: 5, avatarName: "user3" },
+  { name: "Sohan", totalPoints: 85, lastPoint: 15, avatarName: "user4" },
 ];
 
 const GridPointView = () => {
@@ -35,7 +35,8 @@ const styles = StyleSheet.create({
   },
   cardWrapper: {
     width: cardWidth,
-    margin: 10,
+    marginHorizontal: 10,
+    marginBottom: 20,
   },
 });
 

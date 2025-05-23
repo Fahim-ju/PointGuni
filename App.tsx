@@ -1,22 +1,36 @@
-import React from "react";
-import { View, Text, StyleSheet, Platform, StatusBar as RNStatusBar, ScrollView, ImageBackground } from "react-native";
+import React, { useState } from "react";
+import { View, StyleSheet, Platform, StatusBar as RNStatusBar, ImageBackground } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import Footer from "./component/Footer";
-import Icon from "react-native-vector-icons/FontAwesome";
-import PlayerCard from "./component/PlayerCard";
 import GridPointView from "./component/GridPointView";
+import HeaderBar from "./component/HeaderBar";
+import AddPointButton from "./component/AddPointButton";
+import AddPointModal from "./component/modal/AddPointInputModal";
 
 export default function App() {
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const openModal = () => setModalVisible(true);
+  const closeModal = () => setModalVisible(false);
+
+  // Handle submitted points here
+  const handlePointSubmit = (values: number[]) => {
+    console.log("Submitted points:", values);
+    // You can update your player points or state here
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar style="dark" />
-      <ImageBackground source={require("./assets/icon.png")} style={styles.background} resizeMode="cover">
-        <View style={styles.header}>
-          <Text style={styles.title}>PointGuni</Text>
-        </View>
+      <ImageBackground  style={styles.background} resizeMode="cover" blurRadius={3}>
+        <HeaderBar />
         <GridPointView />
+        <View style={styles.addButtonContainer}>
+          <AddPointButton onPress={openModal} />
+        </View>
+        <Footer />
+        <AddPointModal visible={modalVisible} onClose={closeModal} onSubmit={handlePointSubmit} />
       </ImageBackground>
-      <Footer />
     </View>
   );
 }
@@ -30,22 +44,11 @@ const styles = StyleSheet.create({
   },
   background: {
     flex: 1,
+    backgroundColor: "#0D0D0D",
   },
-  header: {
-    backgroundColor: "#264653",
-    paddingVertical: 5,
-    paddingHorizontal: 20,
-    alignItems: "flex-start",
+  addButtonContainer: {
     justifyContent: "center",
-    elevation: 2,
-  },
-  title: {
-    fontSize: 17,
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "left",
-  },
-  playerContainer: {
-    flexDirection: "row",
+    alignItems: "center",
   },
 });
+
