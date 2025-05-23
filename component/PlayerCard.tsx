@@ -54,7 +54,6 @@ const styles = StyleSheet.create({
     height: 250,
     borderRadius: 16,
     overflow: "hidden",
-    margin: 10,
     elevation: 5,
     shadowColor: "#000",
     shadowOpacity: 0.2,
