@@ -4,7 +4,7 @@ import ListPointView from "../component/ListPointView";
 
 const ListPointScreen = () => {
   return (
-    <View>
+    <View style={{ flex: 1, backgroundColor: "#E9DBF8" }}>
       <ListPointView />
     </View>
   );

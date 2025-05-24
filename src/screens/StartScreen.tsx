@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 type RootStackParamList = {
   StartScreen: undefined;
@@ -8,7 +8,7 @@ type RootStackParamList = {
 };
 
 type StartScreenProps = {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'StartScreen'>;
+  navigation: NativeStackNavigationProp<RootStackParamList, "StartScreen">;
 };
 
 const StartScreen: React.FC<StartScreenProps> = ({ navigation }) => {
@@ -18,7 +18,6 @@ const StartScreen: React.FC<StartScreenProps> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>PointGuni</Text>
       <TouchableOpacity style={styles.button} onPress={handleNewGame}>
         <Text style={styles.buttonText}>New Game</Text>
       </TouchableOpacity>
@@ -34,7 +33,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#0D0D0D",
+    backgroundColor: "#E9DBF8",
   },
   title: {
     fontSize: 32,
