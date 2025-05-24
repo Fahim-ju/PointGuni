@@ -19,7 +19,6 @@ export default function App() {
           <ImageBackground style={styles.background} resizeMode="cover" blurRadius={3}>
             <HeaderBar hideActionIcons={currentRoute === "Home"} />
             <AppNavigator />
-            {currentRoute !== "Home" && <Footer />}
           </ImageBackground>
         </NavigationContainer>
       </View>

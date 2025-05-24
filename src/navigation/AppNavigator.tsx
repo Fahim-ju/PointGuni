@@ -1,7 +1,8 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import StartScreen from "../screens/StartScreen";
-import GridPointScreen from "../screens/GridPointScreen";
+// import GridPointScreen from "../screens/GridPointScreen";
+import PointViewerScreen from "../screens/PointViewerScreen";
 import ListPointScreen from "../screens/ListPointScreen";
 import PlayerSetupScreen from "../screens/PlayerSetupScreen";
 
@@ -12,13 +13,8 @@ export default function AppNavigator() {
     <Stack.Navigator initialRouteName="Home">
       <Stack.Screen name="Home" component={StartScreen} options={{ title: "", headerTransparent: true, headerLeft: () => null }} />
       <Stack.Screen
-        name="GridPointView"
-        component={GridPointScreen}
-        options={{ title: "", headerTransparent: true, headerLeft: () => null }}
-      />
-      <Stack.Screen
-        name="ListPointView"
-        component={ListPointScreen}
+        name="PointView"
+        component={PointViewerScreen}
         options={{ title: "", headerTransparent: true, headerLeft: () => null }}
       />
       <Stack.Screen name="PlayerSetupScreen" component={PlayerSetupScreen} />

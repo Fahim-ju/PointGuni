@@ -19,7 +19,7 @@ import { Player } from "../types/Player";
 import { useGameContext } from "../context/GameContext";
 
 type PlayerSetupScreenProps = {
-  navigation: StackNavigationProp<RootStackParamList, "GridPointView">;
+  navigation: StackNavigationProp<RootStackParamList, "PointView">;
 };
 
 const PlayerSetupScreen = ({ navigation }: PlayerSetupScreenProps) => {
@@ -47,7 +47,7 @@ const PlayerSetupScreen = ({ navigation }: PlayerSetupScreenProps) => {
   const handleStart = () => {
     // Pass players data to next screen or save in context/state
     setPlayers(temporaryPlayers);
-    navigation.navigate("GridPointView");
+    navigation.navigate("PointView");
   };
 
   return (

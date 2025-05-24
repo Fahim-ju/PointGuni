@@ -20,7 +20,7 @@ const StartScreen: React.FC<StartScreenProps> = ({ navigation }) => {
   };
   const handleResume = () => {
     if (!canResume) Alert.alert("No saved game found", "Please start a new game first.");
-    else navigation.navigate("GridPointView");
+    else navigation.navigate("PointView");
   };
 
   return (

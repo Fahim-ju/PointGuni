@@ -1,16 +1,12 @@
 import { View, StyleSheet } from "react-native";
 import React, { useState } from "react";
 import GridPointView from "../component/GridPointView";
-import { RootStackParamList } from "../types/RootStack";
-import { RouteProp } from "@react-navigation/native";
 import AddPointButton from "../component/AddPointButton";
 import AddPointModal from "../component/modal/AddPointInputModal";
 import { useGameContext } from "../context/GameContext";
 import { PointRow } from "../types/Game";
 
-type GridPointViewProps = {
-  route: RouteProp<RootStackParamList, "GridPointView">;
-};
+
 const GridPointScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
 

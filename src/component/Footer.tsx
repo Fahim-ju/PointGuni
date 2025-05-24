@@ -5,35 +5,45 @@ import { useNavigation } from "@react-navigation/native";
 import type { NavigationProp } from "@react-navigation/native";
 import type { RootStackParamList } from "../types/RootStack";
 
-const Footer = () => {
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const route = { name: "GridPointView" };
-  const isGridActive = route.name === "GridPointView";
-  const isListActive = route.name === "ListPointView";
+type Props = {
+  onGridPress: () => void;
+  onListPress: () => void;
+  isGridViewActive?: boolean;
+};
+
+const Footer: React.FC<Props> = ({ onGridPress, onListPress, isGridViewActive }) => {
+  const handleGridPress = () => {
+    if (isGridViewActive) {
+      Alert.alert("Already in Grid View", "You are already viewing the grid layout.");
+    } else {
+      onGridPress();
+    }
+  };
+
+  const handleListPress = () => {
+    if (!isGridViewActive) {
+      Alert.alert("Already in List View", "You are already viewing the list layout.");
+    } else {
+      onListPress();
+    }
+  };
+
   return (
     <View style={styles.footerContainer}>
-      <TouchableOpacity
-        style={[styles.iconButton, isGridActive && styles.activeTab]}
-        activeOpacity={0.85}
-        onPress={() => navigation.navigate("GridPointView")}
-      >
+      <TouchableOpacity style={[styles.iconButton, isGridViewActive && styles.activeTab]} activeOpacity={0.85} onPress={handleGridPress}>
         <MaterialCommunityIcons
           name="view-dashboard-outline"
-          size={isGridActive ? 30 : 28}
-          color={isGridActive ? "#fff" : "#E0E0E0"}
-          style={isGridActive ? styles.activeIcon : undefined}
+          size={isGridViewActive ? 30 : 28}
+          color={isGridViewActive ? "#fff" : "#E0E0E0"}
+          style={isGridViewActive ? styles.activeIcon : undefined}
         />
       </TouchableOpacity>
-      <TouchableOpacity
-        style={[styles.iconButton, isListActive && styles.activeTab]}
-        activeOpacity={0.85}
-        onPress={() => navigation.navigate("ListPointView")}
-      >
+      <TouchableOpacity style={[styles.iconButton, !isGridViewActive && styles.activeTab]} activeOpacity={0.85} onPress={handleListPress}>
         <MaterialCommunityIcons
           name="format-list-bulleted"
-          size={isListActive ? 34 : 28}
-          color={isListActive ? "#FFD600" : "#E0E0E0"}
-          style={isListActive ? styles.activeIcon : undefined}
+          size={!isGridViewActive ? 30 : 28}
+          color={!isGridViewActive ? "#fff" : "#E0E0E0"}
+          style={!isGridViewActive ? styles.activeIcon : undefined}
         />
       </TouchableOpacity>
     </View>
