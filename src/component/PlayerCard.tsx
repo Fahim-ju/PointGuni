@@ -1,6 +1,5 @@
 import React, { use } from "react";
 import { View, Text, StyleSheet, ImageBackground, Image } from "react-native";
-import Icon from "react-native-vector-icons/FontAwesome";
 import { Dimensions } from "react-native";
 
 const screenWidth = Dimensions.get("window").width;
@@ -13,20 +12,20 @@ type PlayerCardProps = {
   avatarName?: string;
 };
 const avatarMap: Record<string, any> = {
-  user1: require("../assets/avatar/user1.png"),
-  user2: require("../assets/avatar/user2.png"),
-  user3: require("../assets/avatar/user3.png"),
-  user4: require("../assets/avatar/user4.png"),
-  user5: require("../assets/avatar/user5.png"),
-  user6: require("../assets/avatar/user6.png"),
-  user7: require("../assets/avatar/user7.png"),
-  user8: require("../assets/avatar/user8.png"),
-  user9: require("../assets/avatar/user9.png"),
+  user1: require("../../assets/avatar/user1.png"),
+  user2: require("../../assets/avatar/user2.png"),
+  user3: require("../../assets/avatar/user3.png"),
+  user4: require("../../assets/avatar/user4.png"),
+  user5: require("../../assets/avatar/user5.png"),
+  user6: require("../../assets/avatar/user6.png"),
+  user7: require("../../assets/avatar/user7.png"),
+  user8: require("../../assets/avatar/user8.png"),
+  user9: require("../../assets/avatar/user9.png"),
 };
 const PlayerCard: React.FC<PlayerCardProps> = ({ name, totalPoints, lastPoint, avatarName }) => {
   return (
     <ImageBackground
-      source={require(`../assets/blackcards.jpg`)} // Add a dynamic, stylish background
+      source={require(`../../assets/blackcards.jpg`)} // Add a dynamic, stylish background
       style={styles.card}
       imageStyle={styles.cardImage}
     >

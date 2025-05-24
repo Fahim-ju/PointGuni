@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { View, StyleSheet, Platform, StatusBar as RNStatusBar, ImageBackground } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import Footer from "./component/Footer";
-import GridPointView from "./component/GridPointView";
 import HeaderBar from "./component/HeaderBar";
 import AddPointButton from "./component/AddPointButton";
 import AddPointModal from "./component/modal/AddPointInputModal";
+import AppNavigator from "./navigation/AppNavigator";
+import { NavigationContainer } from "@react-navigation/native";
 
 export default function App() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -21,16 +22,18 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <StatusBar style="dark" />
-      <ImageBackground  style={styles.background} resizeMode="cover" blurRadius={3}>
-        <HeaderBar />
-        <GridPointView />
-        <View style={styles.addButtonContainer}>
-          <AddPointButton onPress={openModal} />
-        </View>
-        <Footer />
-        <AddPointModal visible={modalVisible} onClose={closeModal} onSubmit={handlePointSubmit} />
-      </ImageBackground>
+      <NavigationContainer>
+        <StatusBar style="dark" />
+        <ImageBackground style={styles.background} resizeMode="cover" blurRadius={3}>
+          <HeaderBar />
+          <AppNavigator />
+          <View style={styles.addButtonContainer}>
+            <AddPointButton onPress={openModal} />
+          </View>
+          <Footer />
+          <AddPointModal visible={modalVisible} onClose={closeModal} onSubmit={handlePointSubmit} />
+        </ImageBackground>
+      </NavigationContainer>
     </View>
   );
 }
@@ -51,4 +54,3 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
-

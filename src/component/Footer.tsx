@@ -1,23 +1,17 @@
 import { View, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import React from "react";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { useNavigation } from "@react-navigation/native";
 
 const Footer = () => {
+  const navigation = useNavigation<any>();
   return (
     <View style={styles.footerContainer}>
-      <TouchableOpacity style={styles.iconButton} onPress={() => Alert.alert("Home")}>
-        <MaterialCommunityIcons
-          name="view-dashboard-outline"
-          size={28}
-          color="white"
-        />
+      <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate("GridPointView")}>
+        <MaterialCommunityIcons name="view-dashboard-outline" size={28} color="white" />
       </TouchableOpacity>
-      <TouchableOpacity style={styles.iconButton} onPress={() => Alert.alert("List")}>
-        <MaterialCommunityIcons
-          name="format-list-bulleted"
-          size={28}
-          color="white"
-        />
+      <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate("ListPointView")}>
+        <MaterialCommunityIcons name="format-list-bulleted" size={28} color="white" />
       </TouchableOpacity>
     </View>
   );
@@ -30,7 +24,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#3B3B98",
     paddingVertical: 10,
-    borderTopWidth: .2,
+    borderTopWidth: 0.2,
     borderTopColor: "#eee",
   },
   iconButton: {
