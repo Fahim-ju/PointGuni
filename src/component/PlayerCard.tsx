@@ -36,7 +36,7 @@ const PlayerCard: React.FC<PlayerCardProps> = ({ player }) => {
       </View>
       <View style={styles.stats}>
         <View style={styles.statBlock}>
-          <Text style={styles.statValue}>{totalPoints}</Text>
+          <Text style={styles.statValue}>{totalPoints ?? 0}</Text>
           <Text style={styles.statLabel}>Total</Text>
         </View>
         <View style={styles.statBlock}>

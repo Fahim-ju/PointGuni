@@ -1,15 +1,26 @@
-import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../types/RootStack";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type StartScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, "StartScreen">;
 };
 
 const StartScreen: React.FC<StartScreenProps> = ({ navigation }) => {
+  const [canResume, setCanResume] = useState(false);
+
+  useEffect(() => {
+    AsyncStorage.getItem("players").then((data) => setCanResume(!!data));
+  }, []);
+
   const handleNewGame = () => {
     navigation.navigate("PlayerSetupScreen");
+  };
+  const handleResume = () => {
+    if (!canResume) Alert.alert("No saved game found", "Please start a new game first.");
+    else navigation.navigate("GridPointView");
   };
 
   return (
@@ -17,7 +28,7 @@ const StartScreen: React.FC<StartScreenProps> = ({ navigation }) => {
       <TouchableOpacity style={styles.button} onPress={handleNewGame}>
         <Text style={styles.buttonText}>New Game</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={handleResume}>
         <Text style={styles.buttonText}>Resume</Text>
       </TouchableOpacity>
     </View>
