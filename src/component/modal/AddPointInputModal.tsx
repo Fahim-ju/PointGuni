@@ -22,6 +22,20 @@ const avatarImages = [
   require("../../../assets/avatar/user9.png"),
 ];
 
+// Nice pastel background colors for player rows
+const playerRowColors = [
+  '#FDEBD0', // light orange
+  '#D6EAF8', // light blue
+  '#D5F5E3', // light green
+  '#F9E79F', // light yellow
+  '#F5CBA7', // light peach
+  '#E8DAEF', // light purple
+  '#FADBD8', // light pink
+  '#D4E6F1', // light sky blue
+  '#D1F2EB', // light teal
+];
+
+
 const AddPointModal: React.FC<Props> = ({ visible, onClose, onSubmit, players }) => {
   const [points, setPoints] = useState<string[]>([]);
 
@@ -57,7 +71,13 @@ const AddPointModal: React.FC<Props> = ({ visible, onClose, onSubmit, players })
         <View style={styles.modal}>
           <Text style={styles.title}>Add Points</Text>
           {players.map((player, index) => (
-            <View key={player.id} style={styles.row}>
+            <View
+              key={player.id}
+              style={[
+                styles.row,
+                { backgroundColor: playerRowColors[index+4 % playerRowColors.length] },
+              ]}
+            >
               <Image source={avatarImages[player.avatar]} style={styles.avatar} />
               <Text style={styles.name}>{player.name}</Text>
               <TextInput
@@ -69,6 +89,7 @@ const AddPointModal: React.FC<Props> = ({ visible, onClose, onSubmit, players })
               />
             </View>
           ))}
+
           <View style={styles.actions}>
             <TouchableOpacity onPress={onClose} style={styles.btn}>
               <Text style={styles.btnText}>Cancel</Text>
@@ -107,6 +128,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 10,
+    borderRadius: 8,
+    paddingVertical: 6,
+    paddingHorizontal: 4,
   },
   avatar: {
     width: 36,
