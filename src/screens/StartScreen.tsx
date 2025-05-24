@@ -1,11 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-
-type RootStackParamList = {
-  StartScreen: undefined;
-  GridPointView: undefined;
-};
+import { RootStackParamList } from "../types/RootStack";
 
 type StartScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, "StartScreen">;
@@ -13,7 +9,7 @@ type StartScreenProps = {
 
 const StartScreen: React.FC<StartScreenProps> = ({ navigation }) => {
   const handleNewGame = () => {
-    navigation.navigate("GridPointView");
+    navigation.navigate("PlayerSetupScreen");
   };
 
   return (

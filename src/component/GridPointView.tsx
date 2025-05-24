@@ -1,18 +1,12 @@
 import React from "react";
 import { View, StyleSheet, FlatList, Dimensions } from "react-native";
 import PlayerCard from "./PlayerCard";
+import { Player } from "../types/Player";
 
 const screenWidth = Dimensions.get("window").width;
 const cardWidth = screenWidth / 2 - 30;
 
-const players = [
-  { name: "Hannan", totalPoints: 120, lastPoint: 10, avatarName: "user1" },
-  { name: "Rijvy", totalPoints: 95, lastPoint: 20, avatarName: "user2" },
-  { name: "Anowar", totalPoints: 110, lastPoint: 5, avatarName: "user3" },
-  { name: "Sohan", totalPoints: 85, lastPoint: 15, avatarName: "user4" },
-];
-
-const GridPointView = () => {
+const GridPointView: React.FC<{ players: Player[] }> = ({ players }) => {
   return (
     <FlatList
       data={players}
@@ -20,7 +14,7 @@ const GridPointView = () => {
       numColumns={2}
       renderItem={({ item }) => (
         <View style={styles.cardWrapper}>
-          <PlayerCard name={item.name} totalPoints={item.totalPoints} lastPoint={item.lastPoint} avatarName={item.avatarName} />
+          <PlayerCard player={item} />
         </View>
       )}
       contentContainerStyle={styles.container}

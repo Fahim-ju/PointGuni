@@ -3,6 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import StartScreen from "../screens/StartScreen";
 import GridPointScreen from "../screens/GridPointScreen";
 import ListPointScreen from "../screens/ListPointScreen";
+import PlayerSetupScreen from "../screens/PlayerSetupScreen";
 
 const Stack = createStackNavigator();
 
@@ -20,6 +21,7 @@ export default function AppNavigator() {
         component={ListPointScreen}
         options={{ title: "", headerTransparent: true, headerLeft: () => null }}
       />
+      <Stack.Screen name="PlayerSetupScreen" component={PlayerSetupScreen} />
     </Stack.Navigator>
   );
 }
