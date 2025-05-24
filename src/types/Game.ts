@@ -4,3 +4,8 @@ export type GameSettings = {
   allowNegativePoints: boolean; // Whether players can have negative points
   enableAvatars: boolean; // Whether avatars are enabled for players
 };
+
+export type PointRow = {
+  playerId: number;
+  point: number;
+};

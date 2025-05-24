@@ -6,6 +6,7 @@ import { RouteProp } from "@react-navigation/native";
 import AddPointButton from "../component/AddPointButton";
 import AddPointModal from "../component/modal/AddPointInputModal";
 import { useGameContext } from "../context/GameContext";
+import { PointRow } from "../types/Game";
 
 type GridPointViewProps = {
   route: RouteProp<RootStackParamList, "GridPointView">;
@@ -16,18 +17,19 @@ const GridPointScreen = () => {
   const openModal = () => setModalVisible(true);
   const closeModal = () => setModalVisible(false);
   const { players, updatePlayerPoints } = useGameContext();
-  // Handle submitted points here
-  const handlePointSubmit = (values: number[]) => {
+
+  const handlePointSubmit = (values: PointRow[]) => {
     console.log("Submitted points:", values);
-    // You can update your player points or state here
+    updatePlayerPoints(values);
   };
+  
   return (
     <View style={{ flex: 1, backgroundColor: "#E9DBF8" }}>
       <GridPointView players={players} />
       <View style={styles.addButtonContainer}>
         <AddPointButton onPress={openModal} />
       </View>
-      <AddPointModal visible={modalVisible} onClose={closeModal} onSubmit={handlePointSubmit} />
+      <AddPointModal visible={modalVisible} onClose={closeModal} onSubmit={handlePointSubmit} players={players} />
     </View>
   );
 };

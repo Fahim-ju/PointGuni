@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Player } from "../types/Player";
-import { GameSettings } from "../types/Game";
+import { GameSettings, PointRow } from "../types/Game";
 
 type GameContextType = {
   players: Player[];
@@ -12,11 +12,6 @@ type GameContextType = {
   setGameSettings?: (settings: GameSettings) => void;
   updateGameSettings?: (settings: Partial<GameSettings>) => void;
   resetGameSettings?: () => void;
-};
-
-type PointRow = {
-  playerId: number;
-  point: number;
 };
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
