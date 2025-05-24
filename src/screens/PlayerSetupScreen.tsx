@@ -16,13 +16,16 @@ const avatars = [
 import type { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../types/RootStack";
 import { Player } from "../types/Player";
+import { useGameContext } from "../context/GameContext";
 
 type PlayerSetupScreenProps = {
   navigation: StackNavigationProp<RootStackParamList, "GridPointView">;
 };
 
 const PlayerSetupScreen = ({ navigation }: PlayerSetupScreenProps) => {
-  const [players, setPlayers] = useState<Player[]>([
+  const { setPlayers } = useGameContext();
+
+  const [temporaryPlayers, setTemporaryPlayers] = useState<Player[]>([
     { id: 1, name: "", avatar: 0 },
     { id: 2, name: "", avatar: 1 },
     { id: 3, name: "", avatar: 2 },
@@ -30,26 +33,27 @@ const PlayerSetupScreen = ({ navigation }: PlayerSetupScreenProps) => {
   ]);
 
   const handleNameChange = (index: number, name: string) => {
-    const updated = [...players];
+    const updated = [...temporaryPlayers];
     updated[index].name = name;
-    setPlayers(updated);
+    setTemporaryPlayers(updated);
   };
 
   const handleAvatarSelect = (playerIndex: number, avatarIndex: number) => {
-    const updated = [...players];
+    const updated = [...temporaryPlayers];
     updated[playerIndex].avatar = avatarIndex;
-    setPlayers(updated);
+    setTemporaryPlayers(updated);
   };
 
   const handleStart = () => {
     // Pass players data to next screen or save in context/state
-    navigation.navigate("GridPointView", { players });
+    setPlayers(temporaryPlayers);
+    navigation.navigate("GridPointView");
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Player Setup</Text>
-      {players.map((player, idx) => (
+      {temporaryPlayers.map((player, idx) => (
         <View key={idx} style={styles.playerBlock}>
           <Text style={styles.label}>Player {idx + 1} Name:</Text>
           <TextInput

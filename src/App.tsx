@@ -5,25 +5,25 @@ import Footer from "./component/Footer";
 import HeaderBar from "./component/HeaderBar";
 import AppNavigator from "./navigation/AppNavigator";
 import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native";
+import { GameProvider } from "./context/GameContext";
 
 export default function App() {
   const [currentRoute, setCurrentRoute] = useState<string | undefined>("Home");
   const navigationRef = useRef<NavigationContainerRef<any>>(null);
 
-
-
   return (
-    <View style={styles.container}>
-      <NavigationContainer ref={navigationRef} onStateChange={() => setCurrentRoute(navigationRef.current?.getCurrentRoute()?.name)}>
-        <StatusBar style="dark" />
-        <ImageBackground style={styles.background} resizeMode="cover" blurRadius={3}>
-          <HeaderBar hideActionIcons={currentRoute === "Home"} />
-          <AppNavigator />
-          {currentRoute !== "Home" && <Footer />}
-          
-        </ImageBackground>
-      </NavigationContainer>
-    </View>
+    <GameProvider>
+      <View style={styles.container}>
+        <NavigationContainer ref={navigationRef} onStateChange={() => setCurrentRoute(navigationRef.current?.getCurrentRoute()?.name)}>
+          <StatusBar style="dark" />
+          <ImageBackground style={styles.background} resizeMode="cover" blurRadius={3}>
+            <HeaderBar hideActionIcons={currentRoute === "Home"} />
+            <AppNavigator />
+            {currentRoute !== "Home" && <Footer />}
+          </ImageBackground>
+        </NavigationContainer>
+      </View>
+    </GameProvider>
   );
 }
 

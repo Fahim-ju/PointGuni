@@ -1,7 +1,8 @@
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import React from "react";
+import { Player } from "../types/Player";
 
-const ListPointView = () => {
+const ListPointView: React.FC<{ players: Player[] }> = ({ players }) => {
   const names = ["A", "B", "C", "D"];
   const points = [
     [1, -5, 2, 4],

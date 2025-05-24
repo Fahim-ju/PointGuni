@@ -5,17 +5,17 @@ import { RootStackParamList } from "../types/RootStack";
 import { RouteProp } from "@react-navigation/native";
 import AddPointButton from "../component/AddPointButton";
 import AddPointModal from "../component/modal/AddPointInputModal";
+import { useGameContext } from "../context/GameContext";
 
 type GridPointViewProps = {
   route: RouteProp<RootStackParamList, "GridPointView">;
 };
-const GridPointScreen: React.FC<GridPointViewProps> = ({ route }) => {
-  const { players } = route.params;
+const GridPointScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const openModal = () => setModalVisible(true);
   const closeModal = () => setModalVisible(false);
-
+  const { players, updatePlayerPoints } = useGameContext();
   // Handle submitted points here
   const handlePointSubmit = (values: number[]) => {
     console.log("Submitted points:", values);

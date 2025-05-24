@@ -1,7 +1,7 @@
 import { Player } from "./Player";
 
 export type RootStackParamList = {
-  GridPointView: { players: Player[] };
+  GridPointView: undefined;
   StartScreen: undefined;
   ListPointView: undefined;
   PlayerSetupScreen: undefined;
