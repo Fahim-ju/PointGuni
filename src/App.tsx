@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { View, StyleSheet, Platform, StatusBar as RNStatusBar, ImageBackground } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import Footer from "./component/Footer";
@@ -6,10 +6,12 @@ import HeaderBar from "./component/HeaderBar";
 import AddPointButton from "./component/AddPointButton";
 import AddPointModal from "./component/modal/AddPointInputModal";
 import AppNavigator from "./navigation/AppNavigator";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native";
 
 export default function App() {
   const [modalVisible, setModalVisible] = useState(false);
+  const [currentRoute, setCurrentRoute] = useState<string | undefined>("Home");
+  const navigationRef = useRef<NavigationContainerRef<any>>(null);
 
   const openModal = () => setModalVisible(true);
   const closeModal = () => setModalVisible(false);
@@ -22,15 +24,19 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <NavigationContainer>
+      <NavigationContainer ref={navigationRef} onStateChange={() => setCurrentRoute(navigationRef.current?.getCurrentRoute()?.name)}>
         <StatusBar style="dark" />
         <ImageBackground style={styles.background} resizeMode="cover" blurRadius={3}>
-          <HeaderBar />
+          <HeaderBar hideActionIcons={currentRoute === "Home"} />
           <AppNavigator />
-          <View style={styles.addButtonContainer}>
-            <AddPointButton onPress={openModal} />
-          </View>
-          <Footer />
+          {currentRoute !== "Home" && (
+            <View>
+              <View style={styles.addButtonContainer}>
+                <AddPointButton onPress={openModal} />
+              </View>
+              <Footer />
+            </View>
+          )}
           <AddPointModal visible={modalVisible} onClose={closeModal} onSubmit={handlePointSubmit} />
         </ImageBackground>
       </NavigationContainer>

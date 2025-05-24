@@ -1,4 +1,4 @@
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useNavigationState } from "@react-navigation/native";
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -14,6 +14,8 @@ const HeaderBar: React.FC<Props> = ({ hideActionIcons }) => {
   const onSettings = () => {
     console.log("Settings pressed");
   };
+
+ 
 
   const handleRestart = () => {
     Alert.alert("sure to restart?", "Restarting will reset all points.", [
