@@ -4,10 +4,9 @@ import ListPointView from "../component/ListPointView";
 import { useGameContext } from "../context/GameContext";
 
 const ListPointScreen = () => {
-  const { players, updatePlayerPoints } = useGameContext();
   return (
     <View style={{ flex: 1, backgroundColor: "#E9DBF8" }}>
-      <ListPointView players={players} />
+      <ListPointView />
     </View>
   );
 };

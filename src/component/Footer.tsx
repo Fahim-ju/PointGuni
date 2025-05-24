@@ -4,6 +4,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import { useNavigation } from "@react-navigation/native";
 import type { NavigationProp } from "@react-navigation/native";
 import type { RootStackParamList } from "../types/RootStack";
+import Toast from "react-native-toast-message";
 
 type Props = {
   onGridPress: () => void;
@@ -14,7 +15,29 @@ type Props = {
 const Footer: React.FC<Props> = ({ onGridPress, onListPress, isGridViewActive }) => {
   const handleGridPress = () => {
     if (isGridViewActive) {
-      Alert.alert("Already in Grid View", "You are already viewing the grid layout.");
+      // Replace Alert with Toast for better UX
+      // If using 'react-native-toast-message':
+      // import Toast from 'react-native-toast-message';
+      // Toast.show({ type: 'info', text1: 'Already in Grid View', text2: 'You are already viewing the grid layout.' });
+
+      // If using 'react-native-simple-toast':
+      // import Toast from 'react-native-simple-toast';
+      // Toast.show('Already in Grid View');
+
+      // Example with 'react-native-toast-message':
+      // (Make sure to install and configure the toast library in your project)
+      // Toast.show({
+      //   type: 'info',
+      //   text1: 'Already in Grid View',
+      //   text2: 'You are already viewing the grid layout.',
+      // });
+
+      // For demonstration, here's a simple Toast usage:
+      Toast.show({
+        type: "info",
+        text1: "Already in Grid View",
+        text2: "You are already viewing the grid layout.",
+      });
     } else {
       onGridPress();
     }

@@ -9,8 +9,8 @@ type GameContextType = {
   updatePlayerPoints: (playerPoints: PointRow[]) => void;
   resetGame: () => void;
   resetPoints: () => void;
-  gameSettings?: GameSettings;
-  setGameSettings?: (settings: GameSettings) => void;
+  gameSettings: GameSettings;
+  setGameSettings: (settings: GameSettings) => void;
   updateGameSettings?: (settings: Partial<GameSettings>) => void;
   resetGameSettings?: () => void;
 };
@@ -19,6 +19,7 @@ const GameContext = createContext<GameContextType | undefined>(undefined);
 
 export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [players, setPlayersState] = useState<Player[]>([]);
+  const [gameSettings, setGameSettingsState] = useState<GameSettings>({ minPoints: -999999999, maxPoints: 1000000000 });
 
   // Load players from AsyncStorage on mount
   useEffect(() => {
@@ -68,8 +69,14 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setPlayers(resetPlayers);
   };
 
+  const setGameSettings = (settings: GameSettings) => {
+    setGameSettingsState(settings);
+  };
+
   return (
-    <GameContext.Provider value={{ players, setPlayers, updatePlayerPoints, resetPoints, resetGame }}>{children}</GameContext.Provider>
+    <GameContext.Provider value={{ players, setPlayers, updatePlayerPoints, resetPoints, resetGame, gameSettings, setGameSettings }}>
+      {children}
+    </GameContext.Provider>
   );
 };
 

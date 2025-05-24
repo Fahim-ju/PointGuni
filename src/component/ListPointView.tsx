@@ -1,51 +1,40 @@
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import React from "react";
 import { Player } from "../types/Player";
+import { useGameContext } from "../context/GameContext";
 
-const ListPointView: React.FC<{ players: Player[] }> = ({ players }) => {
-  const names = ["A", "B", "C", "D"];
-  const points = [
-    [1, -5, 2, 4],
-    [2, 3, 1, -4],
-    [-1, 2, 3, 5],
-    [4, -2, 1, -3],
-    [0, 1, -2, 3],
-    [-3, 4, -1, 2],
-    [5, -4, 0, 1],
-    [1, -5, 2, 4],
-    [2, 3, 1, -4],
-    [-1, 2, 3, 5],
-    [4, -2, 1, -3],
-    [0, 1, -2, 3],
-    [-3, 4, -1, 2],
-    [5, -4, 0, 1],
-    [-2, 3, -5, 4],
-    [1, -1, 2, -2],
-    [3, 0, -4, 5],
-  ];
+const ListPointView = () => {
+  const { players } = useGameContext();
+
+  // Find the max number of rounds (points) among all players
+  const maxRounds = players.reduce((max, p) => Math.max(max, p.points?.length || 0), 0);
+
   return (
-    <ScrollView>
-      <View style={styles.content}>
-        <View style={styles.row}>
-          <View style={[styles.column, styles.colHeader, styles.commonTableHeader]}>
-            <Text style={styles.headerText}>User A </Text>
+    <ScrollView horizontal style={{ flex: 1 }} contentContainerStyle={styles.scrollContainer}>
+      <View style={styles.tableWrapper}>
+        {/* Table Header */}
+        <View style={styles.headerRow}>
+          <View style={styles.headerCellFirst}>
+            <Text style={styles.headerText}>Round</Text>
           </View>
-          <View style={[styles.column, styles.colHeader, styles.commonTableHeader]}>
-            <Text style={styles.headerText}>User B</Text>
-          </View>
-          <View style={[styles.column, styles.colHeader, styles.commonTableHeader]}>
-            <Text style={styles.headerText}>User C</Text>
-          </View>
-          <View style={[styles.column, styles.colHeader, styles.commonTableHeader]}>
-            <Text style={styles.headerText}>User D</Text>
-          </View>
+          {players.map((player) => (
+            <View style={styles.headerCell} key={player.id}>
+              <Text style={styles.headerText}>{player.name}</Text>
+            </View>
+          ))}
         </View>
-        {/* Table Row */}
-        {points.map((row, rowIndex) => (
-          <View key={rowIndex} style={styles.row}>
-            {row.map((point, colIndex) => (
-              <View key={colIndex} style={[styles.column, (styles as any)[`col${names[colIndex]}`]]}>
-                <Text style={styles.text}>{point}</Text>
+
+        {/* Table Rows */}
+        {Array.from({ length: maxRounds }).map((_, roundIdx) => (
+          <View style={[styles.row, roundIdx % 2 === 0 ? styles.rowEven : styles.rowOdd]} key={roundIdx}>
+            <View style={styles.cellFirst}>
+              <Text style={styles.roundText}>{roundIdx + 1}</Text>
+            </View>
+            {players.map((player) => (
+              <View style={styles.cell} key={player.id}>
+                <Text style={styles.pointText}>
+                  {player.points && player.points[roundIdx] !== undefined ? player.points[roundIdx] : "-"}
+                </Text>
               </View>
             ))}
           </View>
@@ -58,47 +47,90 @@ const ListPointView: React.FC<{ players: Player[] }> = ({ players }) => {
 export default ListPointView;
 
 const styles = StyleSheet.create({
-  content: {
-    flex: 1,
-    padding: 20,
-    justifyContent: "flex-start",
+  scrollContainer: {
+    paddingVertical: 16,
+    paddingHorizontal: 8,
+    backgroundColor: "#E9DBF8",
+    minWidth: "100%",
+  },
+  tableWrapper: {
+    borderRadius: 16,
+    overflow: "hidden",
+    backgroundColor: "#fff",
+    elevation: 4,
+    shadowColor: "#B39DDB",
+    shadowOpacity: 0.12,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 2 },
+    minWidth: 320,
+  },
+  headerRow: {
+    flexDirection: "row",
+    backgroundColor: "#8E7DBE",
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    minHeight: 44,
     alignItems: "center",
+  },
+  headerCellFirst: {
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+    backgroundColor: "#6C5B9F",
+    borderTopLeftRadius: 16,
+    minWidth: 60,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  headerCell: {
+    flex: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  headerText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
+    textAlign: "center",
   },
   row: {
     flexDirection: "row",
-    width: "100%",
-    justifyContent: "space-between",
-  },
-  column: {
-    flex: 1,
     alignItems: "center",
-    padding: 10,
-    borderWidth: 0.5,
-    borderColor: "black",
+    minHeight: 40,
   },
-  colHeader: {
-    borderBottomWidth: 0,
-    borderBottomColor: "#888",
+  rowEven: {
+    backgroundColor: "#F3EFFF",
   },
-  commonTableHeader: { backgroundColor: "#2a9d8f" },
-  colA: {
-    backgroundColor: "#caf0f8",
+  rowOdd: {
+    backgroundColor: "#fff",
   },
-  colB: {
-    backgroundColor: "#f5ebe0",
+  cellFirst: {
+    minWidth: 60,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRightWidth: 1,
+    borderRightColor: "#E0E0E0",
   },
-  colC: {
-    backgroundColor: "#e3d5ca",
+  cell: {
+    flex: 1,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRightWidth: 1,
+    borderRightColor: "#F0F0F0",
   },
-  colD: {
-    backgroundColor: "#90e0ef",
+  roundText: {
+    fontWeight: "bold",
+    color: "#6C5B9F",
+    fontSize: 15,
   },
-  text: {
-    fontSize: 18,
-  },
-  headerText: {
-    fontSize: 16,
-    fontWeight: "condensedBold",
-    color: "white",
+  pointText: {
+    fontSize: 15,
+    color: "#3B3B98",
+    fontWeight: "600",
   },
 });

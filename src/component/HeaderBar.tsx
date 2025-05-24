@@ -1,8 +1,9 @@
 import { useNavigation, useNavigationState } from "@react-navigation/native";
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { useGameContext } from "../context/GameContext";
+import SettingsModal from "./modal/SettingsModal";
 type Props = {
   hideActionIcons?: boolean;
 };
@@ -10,6 +11,8 @@ type Props = {
 const HeaderBar: React.FC<Props> = ({ hideActionIcons }) => {
   const navigation = useNavigation<any>();
   const { resetPoints } = useGameContext();
+  const [settingsVisible, setSettingsVisible] = useState(false);
+
   const onRestart = () => {
     resetPoints();
   };
@@ -17,7 +20,7 @@ const HeaderBar: React.FC<Props> = ({ hideActionIcons }) => {
     navigation.navigate("Home");
   };
   const onSettings = () => {
-    console.log("Settings pressed");
+    setSettingsVisible(true);
   };
 
   const handleRestart = () => {
@@ -34,22 +37,25 @@ const HeaderBar: React.FC<Props> = ({ hideActionIcons }) => {
     ]);
   };
   return (
-    <View style={styles.header}>
-      <Text style={styles.title}>Point Tracker</Text>
-      {!hideActionIcons && (
-        <View style={{ flexDirection: "row", gap: 25 }}>
-          <TouchableOpacity onPress={handleHome}>
-            <Icon name="home" size={26} color="#fff" />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleRestart}>
-            <Icon name="refresh" size={24} color="#fff" />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={onSettings}>
-            <Icon name="cog" size={24} color="#fff" />
-          </TouchableOpacity>
-        </View>
-      )}
-    </View>
+    <>
+      <View style={styles.header}>
+        <Text style={styles.title}>Point Tracker</Text>
+        {!hideActionIcons && (
+          <View style={{ flexDirection: "row", gap: 25 }}>
+            <TouchableOpacity onPress={handleHome}>
+              <Icon name="home" size={26} color="#fff" />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleRestart}>
+              <Icon name="refresh" size={24} color="#fff" />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={onSettings}>
+              <Icon name="cog" size={24} color="#fff" />
+            </TouchableOpacity>
+          </View>
+        )}
+      </View>
+      <SettingsModal visible={settingsVisible} onClose={() => setSettingsVisible(false)} />
+    </>
   );
 };
 
