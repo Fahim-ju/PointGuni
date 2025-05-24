@@ -8,6 +8,7 @@ type GameContextType = {
   setPlayers: (players: Player[]) => void;
   updatePlayerPoints: (playerPoints: PointRow[]) => void;
   resetGame: () => void;
+  resetPoints: () => void;
   gameSettings?: GameSettings;
   setGameSettings?: (settings: GameSettings) => void;
   updateGameSettings?: (settings: Partial<GameSettings>) => void;
@@ -34,15 +35,21 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Update player points and persist
   const updatePlayerPoints = (playerPoints: PointRow[]) => {
+    console.log("Updating player points:", playerPoints);
     const updatedPlayers = players.reduce((acc, player) => {
       const pointRow = playerPoints.find((row) => row.playerId === player.id);
       if (pointRow) {
-        acc.push({ ...player, totalPoints: player.totalPoints ?? 0 + pointRow.point, points: [...(player.points || []), pointRow.point] });
+        acc.push({
+          ...player,
+          totalPoints: (player.totalPoints ?? 0) + pointRow.point,
+          points: [...(player.points || []), pointRow.point],
+        });
       } else {
         acc.push(player);
       }
       return acc as Player[];
     }, [] as Player[]);
+    console.log("Updated players:", updatedPlayers);
     setPlayers(updatedPlayers);
   };
 
@@ -52,7 +59,18 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     AsyncStorage.removeItem("players");
   };
 
-  return <GameContext.Provider value={{ players, setPlayers, updatePlayerPoints, resetGame }}>{children}</GameContext.Provider>;
+  const resetPoints = () => {
+    const resetPlayers = players.map((player) => ({
+      ...player,
+      totalPoints: 0,
+      points: [],
+    }));
+    setPlayers(resetPlayers);
+  };
+
+  return (
+    <GameContext.Provider value={{ players, setPlayers, updatePlayerPoints, resetPoints, resetGame }}>{children}</GameContext.Provider>
+  );
 };
 
 export const useGameContext = () => {
