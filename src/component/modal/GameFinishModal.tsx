@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { Modal, View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { Player } from "../../types/Player";
 import { useGameContext } from "../../context/GameContext";
@@ -11,16 +11,49 @@ type GameFinishModalProps = {
   onContinue: () => void;
 };
 
+const avatarImages = [
+  require("../../../assets/avatar/user1.png"),
+  require("../../../assets/avatar/user2.png"),
+  require("../../../assets/avatar/user3.png"),
+  require("../../../assets/avatar/user4.png"),
+  require("../../../assets/avatar/user5.png"),
+  require("../../../assets/avatar/user6.png"),
+  require("../../../assets/avatar/user7.png"),
+  require("../../../assets/avatar/user8.png"),
+  require("../../../assets/avatar/user9.png"),
+];
+
 const GameFinishModal: React.FC<GameFinishModalProps> = ({ visible, playersBelowMin, onRestart, onContinue }) => {
+  playersBelowMin = [
+    {
+      id: 1,
+      name: "Player 1",
+      avatar: 0,
+    },
+  ];
   const { players } = useGameContext();
   return (
-    <Modal visible={visible} transparent animationType="slide">
+    <Modal visible={true} transparent animationType="slide">
       <View style={styles.overlay}>
         <View style={styles.modalContent}>
           {/* Party Mode Icon */}
-          <MaterialCommunityIcons name="party-popper" size={80} color="#8E7DBE" style={styles.partyIcon} />
-          <Text style={styles.title}>Party Mode!</Text>
-          <Text style={styles.message}>{playersBelowMin.map((p) => p.name).join(", ")} reached the minimum point!</Text>
+          <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 16 , gap: 10 }}>
+            <MaterialCommunityIcons name="party-popper" size={40} color="#8E7DBE" style={styles.partyIcon} />
+            <Text style={styles.title}>Party is ON!</Text>
+          </View>
+          <View style={styles.playerContainer}>
+            {players.map((player) => (
+              <View
+                key={player.id}
+                style={[styles.playerRow, { backgroundColor: playersBelowMin.some((x) => x.id === player.id) ? "#FFCCCC" : "#F3E8FF" }]}
+              >
+                <Image source={avatarImages[player.avatar]} style={styles.playerIcon} />
+                <Text style={styles.playerName}>{player.name}</Text>
+                <Text style={styles.point}>{player.totalPoints}</Text>
+              </View>
+            ))}
+          </View>
+          <Text style={styles.message}>Restart to start new game with same Players OR continue this game.</Text>
           <View style={styles.buttonRow}>
             <TouchableOpacity onPress={onRestart} style={[styles.button, { marginRight: 16 }]}>
               <Text style={styles.buttonText}>Restart</Text>
@@ -41,23 +74,56 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#0008",
+    padding: 20,
   },
   modalContent: {
     backgroundColor: "#fff",
     borderRadius: 20,
-    padding: 24,
+    padding: 16,
     alignItems: "center",
     minWidth: 280,
   },
   partyIcon: {
-    width: 80,
-    height: 80,
-    marginBottom: 16,
+    width: 40,
+    height: 40,
   },
   title: {
-    fontSize: 22,
+    fontSize: 18,
     fontWeight: "bold",
-    marginBottom: 8,
+    color: "#8E7DBE",
+  },
+  playerContainer: {
+    backgroundColor: "#F3E8FF",
+    borderRadius: 12,
+    padding: 10,
+    marginBottom: 16,
+  },
+  playerRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+    borderRadius: 12,
+    backgroundColor: "#F3E8FF",
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    width: "100%",
+    gap: 10,
+  },
+  playerIcon: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    marginRight: 10,
+    backgroundColor: "#eee",
+  },
+  playerName: {
+    flex: 1,
+    fontSize: 20,
+    marginRight: 10,
+    fontWeight: "bold",
+  },
+  point: {
+    fontSize: 20,
   },
   message: {
     marginBottom: 16,
