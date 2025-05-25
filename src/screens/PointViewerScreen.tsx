@@ -23,7 +23,7 @@ const PointViewerScreen = () => {
           backPressCount.current = 1;
             // Optionally show a toast here: "Press back again to exit"
             // Example using react-native's ToastAndroid (Android only):
-            ToastAndroid.show("Press back again to exit", ToastAndroid.SHORT);
+            ToastAndroid.show("Press back again to exit", 1000);
           if (backPressTimeout.current) clearTimeout(backPressTimeout.current);
           backPressTimeout.current = setTimeout(() => {
             backPressCount.current = 0;

@@ -2,19 +2,18 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Player } from "../types/Player";
 import { GameSettings, PointRow } from "../types/Game";
-import { Alert } from "react-native";
 
 type GameContextType = {
   players: Player[];
   setPlayers: (players: Player[]) => void;
-  updatePlayerPoints: (playerPoints: PointRow[]) => void;
+  updatePlayerPoints: (playerPoints: PointRow[]) => Player[];
   resetGame: () => void;
   resetPoints: () => void;
   gameSettings: GameSettings;
   setGameSettings: (settings: GameSettings) => void;
   updateGameSettings: (settings: Partial<GameSettings>) => void;
   resetGameSettings?: () => void;
-  checkGameFinish: () => Player[];
+  checkGameFinish: (players: Player[]) => Player[];
 };
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
@@ -22,7 +21,6 @@ const GameContext = createContext<GameContextType | undefined>(undefined);
 export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [players, setPlayersState] = useState<Player[]>([]);
   const [gameSettings, setGameSettingsState] = useState<GameSettings>({ minPoints: -999999999, maxPoints: 1000000000 });
-
   // Load players from AsyncStorage on mount
   useEffect(() => {
     AsyncStorage.getItem("players").then((data) => {
@@ -62,6 +60,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return acc as Player[];
     }, [] as Player[]);
     setPlayers(updatedPlayers);
+    return updatedPlayers;
   };
 
   // Reset game (clear players)
@@ -79,7 +78,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setPlayers(resetPlayers);
   };
 
-  const checkGameFinish = (): Player[] => {
+  const checkGameFinish = (players: Player[]): Player[] => {
     if (!players || !gameSettings) return [];
     const minPoint = gameSettings.minPoints;
     const playersBelowMin = players.filter((p) => p.totalPoints !== undefined && p.totalPoints <= minPoint);

@@ -18,16 +18,17 @@ const GridPointScreen = () => {
   const { players, updatePlayerPoints, resetPoints, checkGameFinish, updateGameSettings } = useGameContext();
 
   const handlePointSubmit = (values: PointRow[]) => {
-    updatePlayerPoints(values);
-    const loserPlayers = checkGameFinish();
-    setPlayersBelowMin(loserPlayers);
-    if (loserPlayers.length > 0) {
+    const updatedPlayers = updatePlayerPoints(values);
+    const finishers = checkGameFinish(updatedPlayers);
+    setPlayersBelowMin(finishers);
+    console.log("Loser Players:", finishers);
+    if (finishers.length > 0) {
       setGameFinishModalVisible(true);
     }
   };
 
   const handleContinueGame = () => {
-    setModalVisible(false);
+    setGameFinishModalVisible(false);
     updateGameSettings({ minPoints: -999999999 });
   };
 
