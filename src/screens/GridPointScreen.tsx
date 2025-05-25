@@ -21,7 +21,6 @@ const GridPointScreen = () => {
     const updatedPlayers = updatePlayerPoints(values);
     const finishers = checkGameFinish(updatedPlayers);
     setPlayersBelowMin(finishers);
-    console.log("Loser Players:", finishers);
     if (finishers.length > 0) {
       setGameFinishModalVisible(true);
     }

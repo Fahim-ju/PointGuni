@@ -24,7 +24,6 @@ const ListPointView = () => {
     return tempRounds;
   }, [players]);
 
-  console.log("screenheight", screenHeight);
 
   return (
     <ScrollView horizontal contentContainerStyle={styles.scrollContainer} showsHorizontalScrollIndicator={false}>
