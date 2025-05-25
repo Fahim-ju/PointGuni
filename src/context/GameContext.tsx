@@ -12,8 +12,9 @@ type GameContextType = {
   resetPoints: () => void;
   gameSettings: GameSettings;
   setGameSettings: (settings: GameSettings) => void;
-  updateGameSettings?: (settings: Partial<GameSettings>) => void;
+  updateGameSettings: (settings: Partial<GameSettings>) => void;
   resetGameSettings?: () => void;
+  checkGameFinish: () => Player[];
 };
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
@@ -39,7 +40,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   // Update player points and persist
-  const updatePlayerPoints = (playerPoints: PointRow[]) => {
+  const updatePlayerPoints = (playerPoints: PointRow[], onMinPointReached?: (playersBelowMin: Player[]) => void) => {
     const updatedPlayers = players.reduce((acc, player) => {
       const actualPointRow = playerPoints.map((row, i, arr) => {
         const actualPoint = arr.reduce((sum, r) => sum + (r.point - row.point), 0);
@@ -61,7 +62,6 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return acc as Player[];
     }, [] as Player[]);
     setPlayers(updatedPlayers);
-    checkMinPoint(updatedPlayers, gameSettings);
   };
 
   // Reset game (clear players)
@@ -79,35 +79,11 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setPlayers(resetPlayers);
   };
 
-  const checkMinPoint = (players: Player[], gameSettings: GameSettings) => {
-    if (!players || !gameSettings) return;
-
+  const checkGameFinish = (): Player[] => {
+    if (!players || !gameSettings) return [];
     const minPoint = gameSettings.minPoints;
-    const playerBelowMin = players.filter((p) => p.totalPoints && p.totalPoints <= minPoint);
-    if (playerBelowMin && playerBelowMin.length > 0) {
-      Alert.alert(
-        "Player Reached Minimum Point",
-        `Player ${playerBelowMin.map((x) => `${x} ,`)} has reached the minimum point (${minPoint}). Do you want to restart or continue?`,
-        [
-          {
-            text: "Restart",
-            onPress: () => {
-              resetPoints();
-            },
-          },
-          {
-            text: "Continue",
-            style: "cancel",
-            onPress: () => {
-              setGameSettings({
-                ...gameSettings,
-                minPoints: -99999999,
-              });
-            },
-          },
-        ]
-      );
-    }
+    const playersBelowMin = players.filter((p) => p.totalPoints !== undefined && p.totalPoints <= minPoint);
+    return playersBelowMin;
   };
 
   const setGameSettings = (settings: GameSettings) => {
@@ -115,8 +91,25 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     AsyncStorage.setItem("gameSettings", JSON.stringify(settings));
   };
 
+  const updateGameSettings = (settings: Partial<GameSettings>) => {
+    setGameSettingsState((prev) => ({ ...prev, ...settings }));
+    AsyncStorage.setItem("gameSettings", JSON.stringify({ ...gameSettings, ...settings }));
+  };
+
   return (
-    <GameContext.Provider value={{ players, setPlayers, updatePlayerPoints, resetPoints, resetGame, gameSettings, setGameSettings }}>
+    <GameContext.Provider
+      value={{
+        players,
+        setPlayers,
+        updatePlayerPoints,
+        resetPoints,
+        resetGame,
+        gameSettings,
+        setGameSettings,
+        checkGameFinish,
+        updateGameSettings,
+      }}
+    >
       {children}
     </GameContext.Provider>
   );
