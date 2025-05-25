@@ -17,7 +17,11 @@ export default function AppNavigator() {
         component={PointViewerScreen}
         options={{ title: "", headerTransparent: true, headerLeft: () => null }}
       />
-      <Stack.Screen name="PlayerSetupScreen" component={PlayerSetupScreen} />
+      <Stack.Screen
+        name="PlayerSetupScreen"
+        component={PlayerSetupScreen}
+        options={{ title: "", headerTransparent: true, headerLeft: () => null }}
+      />
     </Stack.Navigator>
   );
 }

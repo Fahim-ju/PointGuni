@@ -17,7 +17,7 @@ export default function App() {
         <NavigationContainer ref={navigationRef} onStateChange={() => setCurrentRoute(navigationRef.current?.getCurrentRoute()?.name)}>
           <StatusBar style="dark" />
           <ImageBackground style={styles.background} resizeMode="cover" blurRadius={3}>
-            <HeaderBar hideActionIcons={currentRoute === "Home"} />
+            <HeaderBar hideActionIcons={currentRoute !== "PointView"} />
             <AppNavigator />
           </ImageBackground>
         </NavigationContainer>

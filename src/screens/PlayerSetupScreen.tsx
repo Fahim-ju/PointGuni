@@ -55,45 +55,53 @@ const PlayerSetupScreen = ({ navigation }: PlayerSetupScreenProps) => {
       <Text style={styles.title}>Player Setup</Text>
       {temporaryPlayers.map((player, idx) => (
         <View key={idx} style={styles.playerBlock}>
-          <Text style={styles.label}>Player {idx + 1} Name:</Text>
-          <TextInput
-            style={styles.input}
-            value={player.name}
-            onChangeText={(text) => handleNameChange(idx, text)}
-            placeholder={`Enter name for Player ${idx + 1}`}
-          />
-          <Text style={styles.label}>Select Avatar:</Text>
-          <View style={styles.avatarRow}>
-            {avatars.map((avatar, aIdx) => (
-              <TouchableOpacity
-                key={aIdx}
-                onPress={() => handleAvatarSelect(idx, aIdx)}
-                style={[styles.avatarContainer, player.avatar === aIdx && styles.selectedAvatar]}
-              >
-                <Image source={avatar} style={styles.avatar} />
-              </TouchableOpacity>
-            ))}
+          <Text style={styles.label}>Player {idx + 1}</Text>
+          <View style={styles.playerInfo}>
+            <TextInput
+              style={styles.input}
+              value={player.name}
+              onChangeText={(text) => handleNameChange(idx, text)}
+              placeholder={`Enter name for Player ${idx + 1}`}
+            />
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={styles.avatarScroll}
+              contentContainerStyle={styles.avatarRow}
+            >
+              {avatars.map((avatar, aIdx) => (
+                <TouchableOpacity
+                  key={aIdx}
+                  onPress={() => handleAvatarSelect(idx, aIdx)}
+                  style={[styles.avatarContainer, player.avatar === aIdx && styles.selectedAvatar]}
+                >
+                  <Image source={avatar} style={styles.avatar} />
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
           </View>
         </View>
       ))}
       <TouchableOpacity style={styles.startButton} onPress={handleStart}>
-        <Text style={styles.startButtonText}>Start Game</Text>
+        <Text style={styles.startButtonText}>Next</Text>
       </TouchableOpacity>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { padding: 20, backgroundColor: "#E9DBF8", flexGrow: 1 },
+  container: { padding: 12, backgroundColor: "#E9DBF8", flexGrow: 1 },
   title: { fontSize: 28, fontWeight: "bold", marginBottom: 20, textAlign: "center" },
-  playerBlock: { marginBottom: 30 },
-  label: { fontSize: 16, marginBottom: 5 },
-  input: { backgroundColor: "#fff", borderRadius: 8, padding: 10, marginBottom: 10 },
-  avatarRow: { flexDirection: "row", flexWrap: "wrap" },
+  playerBlock: { marginBottom: 20, backgroundColor: "#D6C1E6", padding: 10, borderRadius: 10, elevation: 5,shadowColor: "black" },
+  playerInfo: { flexDirection: "row", alignItems: "center" },
+  label: { fontSize: 16, fontWeight: "600" },
+  input: { backgroundColor: "#fff", borderRadius: 8, padding: 10 },
+  avatarRow: { flexDirection: "row", alignItems: "center" },
+  avatarScroll: { margin: 10 },
   avatarContainer: { margin: 5, borderWidth: 2, borderColor: "transparent", borderRadius: 8 },
   selectedAvatar: { borderColor: "#3B3B98" },
-  avatar: { width: 50, height: 50, borderRadius: 8 },
-  startButton: { backgroundColor: "#3B3B98", padding: 16, borderRadius: 10, alignItems: "center" },
+  avatar: { width: 40, height: 40, borderRadius: 8 },
+  startButton: { marginTop: 10, backgroundColor: "#3B3B98", padding: 16, borderRadius: 10, alignItems: "center" },
   startButtonText: { color: "#fff", fontSize: 20, fontWeight: "bold" },
 });
 
