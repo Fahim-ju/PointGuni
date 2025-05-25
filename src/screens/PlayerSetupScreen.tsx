@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, ScrollView } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, ScrollView, Keyboard } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const avatars = [
   require("../../assets/avatar/user1.png"),
@@ -51,7 +52,12 @@ const PlayerSetupScreen = ({ navigation }: PlayerSetupScreenProps) => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <KeyboardAwareScrollView
+      contentContainerStyle={styles.container}
+      enableOnAndroid={true}
+      extraScrollHeight={100}
+      keyboardShouldPersistTaps="handled"
+    >
       <Text style={styles.title}>Player Setup</Text>
       {temporaryPlayers.map((player, idx) => (
         <View key={idx} style={styles.playerBlock}>
@@ -61,7 +67,10 @@ const PlayerSetupScreen = ({ navigation }: PlayerSetupScreenProps) => {
               style={styles.input}
               value={player.name}
               onChangeText={(text) => handleNameChange(idx, text)}
-              placeholder={`Enter name for Player ${idx + 1}`}
+              placeholder={`Enter name of Player ${idx + 1}`}
+              multiline={false}
+              numberOfLines={1}
+              textAlignVertical="center"
             />
             <ScrollView
               horizontal
@@ -85,13 +94,13 @@ const PlayerSetupScreen = ({ navigation }: PlayerSetupScreenProps) => {
       <TouchableOpacity style={styles.startButton} onPress={handleStart}>
         <Text style={styles.startButtonText}>Next</Text>
       </TouchableOpacity>
-    </ScrollView>
+    </KeyboardAwareScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: { padding: 12, backgroundColor: "#E9DBF8", flexGrow: 1 },
-  title: { fontSize: 28, fontWeight: "bold", marginBottom: 20, textAlign: "center" },
+  title: { fontSize: 22, fontWeight: "bold", marginBottom: 20, textAlign: "center" },
   playerBlock: {
     marginBottom: 20,
     backgroundColor: "#D6C1E6",
@@ -107,10 +116,10 @@ const styles = StyleSheet.create({
   },
   playerInfo: { flexDirection: "row", alignItems: "center" },
   label: { fontSize: 16, fontWeight: "600" },
-  input: { backgroundColor: "#fff", borderRadius: 8, padding: 10, flex: 1 },
+  input: { backgroundColor: "#fff", borderRadius: 8, padding: 8, flex: 1, fontSize: 16 },
   avatarRow: { flexDirection: "row", alignItems: "center" },
-  avatarScroll: { margin: 10 },
-  avatarContainer: { margin: 5, borderWidth: 2, borderColor: "transparent", borderRadius: 8 },
+  avatarScroll: { margin: 10, maxWidth: 153 },
+  avatarContainer: { margin: 4, borderWidth: 2, borderColor: "transparent", borderRadius: 8 },
   selectedAvatar: { borderColor: "midnightblue" },
   avatar: { width: 40, height: 40, borderRadius: 5 },
   startButton: { marginTop: 10, backgroundColor: "#3B3B98", padding: 16, borderRadius: 10, alignItems: "center" },
