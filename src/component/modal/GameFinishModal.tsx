@@ -2,6 +2,7 @@ import React from "react";
 import { Modal, View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { Player } from "../../types/Player";
+import { useGameContext } from "../../context/GameContext";
 
 type GameFinishModalProps = {
   visible: boolean;
@@ -11,6 +12,7 @@ type GameFinishModalProps = {
 };
 
 const GameFinishModal: React.FC<GameFinishModalProps> = ({ visible, playersBelowMin, onRestart, onContinue }) => {
+  const { players } = useGameContext();
   return (
     <Modal visible={visible} transparent animationType="slide">
       <View style={styles.overlay}>

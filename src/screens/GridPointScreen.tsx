@@ -10,6 +10,7 @@ import { Player } from "../types/Player";
 
 const GridPointScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [gameFinishModalVisible, setGameFinishModalVisible] = useState(false);
   const [playersBelowMin, setPlayersBelowMin] = useState<Player[]>([]);
 
   const openModal = () => setModalVisible(true);
@@ -18,11 +19,21 @@ const GridPointScreen = () => {
 
   const handlePointSubmit = (values: PointRow[]) => {
     updatePlayerPoints(values);
-    setPlayersBelowMin(checkGameFinish());
+    const loserPlayers = checkGameFinish();
+    setPlayersBelowMin(loserPlayers);
+    if (loserPlayers.length > 0) {
+      setGameFinishModalVisible(true);
+    }
   };
 
   const handleContinueGame = () => {
+    setModalVisible(false);
     updateGameSettings({ minPoints: -999999999 });
+  };
+
+  const handleRestartGame = () => {
+    resetPoints();
+    setGameFinishModalVisible(false);
   };
 
   return (
@@ -32,10 +43,10 @@ const GridPointScreen = () => {
         <AddPointButton onPress={openModal} />
       </View>
       <GameFinishModal
-        visible={playersBelowMin.length > 0}
+        visible={gameFinishModalVisible}
         playersBelowMin={playersBelowMin}
-        onRestart={resetPoints}
-        onContinue={() => console.log("continue")}
+        onRestart={handleRestartGame}
+        onContinue={handleContinueGame}
       />
       <AddPointModal visible={modalVisible} onClose={closeModal} onSubmit={handlePointSubmit} players={players} />
     </View>
