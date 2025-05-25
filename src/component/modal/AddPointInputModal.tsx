@@ -24,17 +24,16 @@ const avatarImages = [
 
 // Nice pastel background colors for player rows
 const playerRowColors = [
-  '#FDEBD0', // light orange
-  '#D6EAF8', // light blue
-  '#D5F5E3', // light green
-  '#F9E79F', // light yellow
-  '#F5CBA7', // light peach
-  '#E8DAEF', // light purple
-  '#FADBD8', // light pink
-  '#D4E6F1', // light sky blue
-  '#D1F2EB', // light teal
+  "#FDEBD0", // light orange
+  "#D6EAF8", // light blue
+  "#D5F5E3", // light green
+  "#F9E79F", // light yellow
+  "#F5CBA7", // light peach
+  "#E8DAEF", // light purple
+  "#FADBD8", // light pink
+  "#D4E6F1", // light sky blue
+  "#D1F2EB", // light teal
 ];
-
 
 const AddPointModal: React.FC<Props> = ({ visible, onClose, onSubmit, players }) => {
   const [points, setPoints] = useState<string[]>([]);
@@ -71,13 +70,7 @@ const AddPointModal: React.FC<Props> = ({ visible, onClose, onSubmit, players })
         <View style={styles.modal}>
           <Text style={styles.title}>Add Points</Text>
           {players.map((player, index) => (
-            <View
-              key={player.id}
-              style={[
-                styles.row,
-                { backgroundColor: playerRowColors[index+4 % playerRowColors.length] },
-              ]}
-            >
+            <View key={player.id} style={[styles.row, { backgroundColor: playerRowColors[index + (4 % playerRowColors.length)] }]}>
               <Image source={avatarImages[player.avatar]} style={styles.avatar} />
               <Text style={styles.name}>{player.name}</Text>
               <TextInput
@@ -162,11 +155,15 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   submitBtn: {
-    marginLeft: 10,
+    backgroundColor: "#E9DBF8",
+    borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
   },
   btnText: {
-    color: "#007AFF",
+    color: "#3B3B98",
     fontWeight: "bold",
+    fontSize: 16,
   },
 });
 
