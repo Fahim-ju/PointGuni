@@ -1,6 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, ScrollView, Keyboard } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import type { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../types/RootStack";
+import { Player } from "../types/Player";
+import { useGameContext } from "../context/GameContext";
 
 const avatars = [
   require("../../assets/avatar/user1.png"),
@@ -13,11 +17,6 @@ const avatars = [
   require("../../assets/avatar/user8.png"),
   require("../../assets/avatar/user9.png"),
 ];
-
-import type { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../types/RootStack";
-import { Player } from "../types/Player";
-import { useGameContext } from "../context/GameContext";
 
 type PlayerSetupScreenProps = {
   navigation: StackNavigationProp<RootStackParamList, "PointView">;
@@ -33,6 +32,19 @@ const PlayerSetupScreen = ({ navigation }: PlayerSetupScreenProps) => {
     { id: 4, name: "", avatar: 3 },
   ]);
 
+  // Refs for each player's avatar ScrollView
+  const avatarScrollRefs = useRef<(ScrollView | null)[]>([]);
+
+  useEffect(() => {
+    temporaryPlayers.forEach((player, idx) => {
+      const ref = avatarScrollRefs.current[idx];
+      if (ref && player.avatar != null) {
+        const scrollToX = Math.max(0, player.avatar * 48 - 42);
+        ref.scrollTo({ x: scrollToX, animated: true });
+      }
+    });
+  }, []); 
+
   const handleNameChange = (index: number, name: string) => {
     const updated = [...temporaryPlayers];
     updated[index].name = name;
@@ -46,7 +58,11 @@ const PlayerSetupScreen = ({ navigation }: PlayerSetupScreenProps) => {
   };
 
   const handleStart = () => {
-    // Pass players data to next screen or save in context/state
+    const allNamesFilled = temporaryPlayers.every((p) => p.name.trim().length > 0);
+    if (!allNamesFilled) {
+      alert("Please enter a name for every player.");
+      return;
+    }
     setPlayers(temporaryPlayers);
     navigation.navigate("PointView");
   };
@@ -73,6 +89,9 @@ const PlayerSetupScreen = ({ navigation }: PlayerSetupScreenProps) => {
               textAlignVertical="center"
             />
             <ScrollView
+              ref={(ref) => {
+                avatarScrollRefs.current[idx] = ref;
+              }}
               horizontal
               showsHorizontalScrollIndicator={false}
               style={styles.avatarScroll}
