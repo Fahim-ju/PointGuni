@@ -64,7 +64,7 @@ const PlayerSetupScreen = ({ navigation }: PlayerSetupScreenProps) => {
       return;
     }
     setPlayers(temporaryPlayers);
-    navigation.navigate("PointView");
+    navigation.navigate("GameSettingsScreen");
   };
 
   return (
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
   avatarContainer: { margin: 4, borderWidth: 2, borderColor: "transparent", borderRadius: 8 },
   selectedAvatar: { borderColor: "midnightblue" },
   avatar: { width: 40, height: 40, borderRadius: 5 },
-  startButton: { marginTop: 10, backgroundColor: "#3B3B98", padding: 16, borderRadius: 10, alignItems: "center" },
+  startButton: { marginTop: 10, backgroundColor: "#3B3B98", padding: 10, borderRadius: 10, alignItems: "center" },
   startButtonText: { color: "#fff", fontSize: 20, fontWeight: "bold" },
 });
 
