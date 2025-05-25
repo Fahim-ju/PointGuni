@@ -9,3 +9,11 @@ export type PointRow = {
   playerId: number;
   point: number;
 };
+
+export type Round = {
+  roundNumber: number;
+  scores: {
+    playerId: number;
+    points: number;
+  }[];
+};

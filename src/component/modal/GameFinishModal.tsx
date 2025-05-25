@@ -25,13 +25,6 @@ const avatarImages = [
 ];
 
 const GameFinishModal: React.FC<GameFinishModalProps> = ({ visible, playersBelowMin, onRestart, onContinue }) => {
-  playersBelowMin = [
-    {
-      id: 1,
-      name: "Player 1",
-      avatar: 0,
-    },
-  ];
   const { players } = useGameContext();
   return (
     <Modal visible={visible} transparent animationType="slide">
