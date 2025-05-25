@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Player } from "../types/Player";
 import { GameSettings, PointRow } from "../types/Game";
+import { Alert } from "react-native";
 
 type GameContextType = {
   players: Player[];
@@ -26,6 +27,9 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     AsyncStorage.getItem("players").then((data) => {
       if (data) setPlayersState(JSON.parse(data));
     });
+    AsyncStorage.getItem("gameSettings").then((data) => {
+      if (data) setGameSettingsState(JSON.parse(data));
+    });
   }, []);
 
   // Save players to AsyncStorage whenever they change
@@ -36,9 +40,15 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Update player points and persist
   const updatePlayerPoints = (playerPoints: PointRow[]) => {
-    console.log("Updating player points:", playerPoints);
     const updatedPlayers = players.reduce((acc, player) => {
-      const pointRow = playerPoints.find((row) => row.playerId === player.id);
+      const actualPointRow = playerPoints.map((row, i, arr) => {
+        const actualPoint = arr.reduce((sum, r) => sum + (r.point - row.point), 0);
+        return {
+          ...row,
+          point: actualPoint ?? 0,
+        };
+      });
+      const pointRow = actualPointRow.find((row) => row.playerId === player.id);
       if (pointRow) {
         acc.push({
           ...player,
@@ -50,8 +60,8 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       return acc as Player[];
     }, [] as Player[]);
-    console.log("Updated players:", updatedPlayers);
     setPlayers(updatedPlayers);
+    checkMinPoint(updatedPlayers, gameSettings);
   };
 
   // Reset game (clear players)
@@ -69,8 +79,40 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setPlayers(resetPlayers);
   };
 
+  const checkMinPoint = (players: Player[], gameSettings: GameSettings) => {
+    if (!players || !gameSettings) return;
+
+    const minPoint = gameSettings.minPoints;
+    const playerBelowMin = players.filter((p) => p.totalPoints && p.totalPoints <= minPoint);
+    if (playerBelowMin && playerBelowMin.length > 0) {
+      Alert.alert(
+        "Player Reached Minimum Point",
+        `Player ${playerBelowMin.map((x) => `${x} ,`)} has reached the minimum point (${minPoint}). Do you want to restart or continue?`,
+        [
+          {
+            text: "Restart",
+            onPress: () => {
+              resetPoints();
+            },
+          },
+          {
+            text: "Continue",
+            style: "cancel",
+            onPress: () => {
+              setGameSettings({
+                ...gameSettings,
+                minPoints: -99999999,
+              });
+            },
+          },
+        ]
+      );
+    }
+  };
+
   const setGameSettings = (settings: GameSettings) => {
     setGameSettingsState(settings);
+    AsyncStorage.setItem("gameSettings", JSON.stringify(settings));
   };
 
   return (

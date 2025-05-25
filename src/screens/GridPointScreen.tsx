@@ -15,7 +15,6 @@ const GridPointScreen = () => {
   const { players, updatePlayerPoints } = useGameContext();
 
   const handlePointSubmit = (values: PointRow[]) => {
-    console.log("Submitted points:", values);
     updatePlayerPoints(values);
   };
   
