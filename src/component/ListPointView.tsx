@@ -1,103 +1,106 @@
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Dimensions } from "react-native";
 import React from "react";
+import { Player } from "../types/Player";
+import { useGameContext } from "../context/GameContext";
+import { Round } from "../types/Game";
+
+const screenHeight = Dimensions.get("window").height;
 
 const ListPointView = () => {
-  const names = ["A", "B", "C", "D"];
-  const points = [
-    [1, -5, 2, 4],
-    [2, 3, 1, -4],
-    [-1, 2, 3, 5],
-    [4, -2, 1, -3],
-    [0, 1, -2, 3],
-    [-3, 4, -1, 2],
-    [5, -4, 0, 1],
-    [1, -5, 2, 4],
-    [2, 3, 1, -4],
-    [-1, 2, 3, 5],
-    [4, -2, 1, -3],
-    [0, 1, -2, 3],
-    [-3, 4, -1, 2],
-    [5, -4, 0, 1],
-    [-2, 3, -5, 4],
-    [1, -1, 2, -2],
-    [3, 0, -4, 5],
-  ];
+  const { players } = useGameContext();
+  const rounds: Round[] = React.useMemo(() => {
+    const maxRounds = Math.max(...players.map((player) => player.points?.length ?? 0));
+    const tempRounds: Round[] = [];
+    for (let roundIndex = 0; roundIndex < maxRounds; roundIndex++) {
+      const scores = players.map((player) => ({
+        playerId: player.id,
+        points: player.points?.[roundIndex] ?? 0,
+      }));
+      tempRounds.push({
+        roundNumber: roundIndex + 1,
+        scores,
+      });
+    }
+    return tempRounds;
+  }, [players]);
+
+
   return (
-    <ScrollView>
-      <View style={styles.content}>
-        <View style={styles.row}>
-          <View style={[styles.column, styles.colHeader, styles.commonTableHeader]}>
-            <Text style={styles.headerText}>User A </Text>
-          </View>
-          <View style={[styles.column, styles.colHeader, styles.commonTableHeader]}>
-            <Text style={styles.headerText}>User B</Text>
-          </View>
-          <View style={[styles.column, styles.colHeader, styles.commonTableHeader]}>
-            <Text style={styles.headerText}>User C</Text>
-          </View>
-          <View style={[styles.column, styles.colHeader, styles.commonTableHeader]}>
-            <Text style={styles.headerText}>User D</Text>
-          </View>
+    <ScrollView horizontal contentContainerStyle={styles.scrollContainer} showsHorizontalScrollIndicator={false}>
+      <View style={styles.tableWrapper}>
+        <View style={[styles.tableRow, { backgroundColor: "#F5F1FA" }]}>
+          <Text style={[styles.tableCell, styles.tableHeader, styles.firstCell, { color: "#6C3FC5" }]}>T</Text>
+          <Text style={[styles.tableCell, styles.tableHeader, { color: "#6C3FC5" }]}>{players?.[0]?.totalPoints ?? "_"}</Text>
+          <Text style={[styles.tableCell, styles.tableHeader, { color: "#6C3FC5" }]}>{players?.[1]?.totalPoints ?? "_"}</Text>
+          <Text style={[styles.tableCell, styles.tableHeader, { color: "#6C3FC5" }]}>{players?.[2]?.totalPoints ?? "_"}</Text>
+          <Text style={[styles.tableCell, styles.tableHeader, { color: "#6C3FC5" }]}>{players?.[3]?.totalPoints ?? "_"}</Text>
         </View>
-        {/* Table Row */}
-        {points.map((row, rowIndex) => (
-          <View key={rowIndex} style={styles.row}>
-            {row.map((point, colIndex) => (
-              <View key={colIndex} style={[styles.column, (styles as any)[`col${names[colIndex]}`]]}>
-                <Text style={styles.text}>{point}</Text>
-              </View>
-            ))}
-          </View>
-        ))}
+        <View style={[styles.tableRow, { backgroundColor: "#6C3FC5" }]}>
+          <Text style={[styles.tableCell, styles.tableHeader, styles.firstCell, { color: "#fff" }]}>SL.</Text>
+          <Text style={[styles.tableCell, styles.tableHeader, { color: "#fff" }]}>{players?.[0].name ?? "-"}</Text>
+          <Text style={[styles.tableCell, styles.tableHeader, { color: "#fff" }]}>{players?.[1].name ?? "-"}</Text>
+          <Text style={[styles.tableCell, styles.tableHeader, { color: "#fff" }]}>{players?.[2].name ?? "-"}</Text>
+          <Text style={[styles.tableCell, styles.tableHeader, { color: "#fff" }]}>{players?.[3].name ?? "-"}</Text>
+        </View>
+        {/* Scrollable Body */}
+        <ScrollView style={[styles.bodyScroll]} showsVerticalScrollIndicator={false}>
+          {rounds.map((round, index) => (
+            <View key={index} style={[styles.tableRow, { backgroundColor: index % 2 === 0 ? "#F3E9FC" : "#fff" }]}>
+              <Text style={[styles.tableCell, styles.tableData, styles.firstCell]}>{index + 1}</Text>
+              <Text style={[styles.tableCell, styles.tableData]}>{round.scores?.[0].points ?? "-"}</Text>
+              <Text style={[styles.tableCell, styles.tableData]}>{round.scores?.[1].points ?? "-"}</Text>
+              <Text style={[styles.tableCell, styles.tableData]}>{round.scores?.[2].points ?? "-"}</Text>
+              <Text style={[styles.tableCell, styles.tableData]}>{round.scores?.[3].points ?? "-"}</Text>
+            </View>
+          ))}
+        </ScrollView>
       </View>
     </ScrollView>
   );
 };
 
 export default ListPointView;
-
 const styles = StyleSheet.create({
-  content: {
-    flex: 1,
-    padding: 20,
-    justifyContent: "flex-start",
-    alignItems: "center",
-  },
-  row: {
-    flexDirection: "row",
-    width: "100%",
-    justifyContent: "space-between",
-  },
-  column: {
-    flex: 1,
-    alignItems: "center",
+  scrollContainer: {
     padding: 10,
-    borderWidth: 0.5,
-    borderColor: "black",
+    backgroundColor: "#E9DBF8",
   },
-  colHeader: {
-    borderBottomWidth: 0,
-    borderBottomColor: "#888",
+  tableWrapper: {
+    alignItems: "center",
+    borderRadius: 10,
   },
-  commonTableHeader: { backgroundColor: "#2a9d8f" },
-  colA: {
-    backgroundColor: "#caf0f8",
+  tableRow: {
+    flexDirection: "row",
+    borderRadius: 5,
   },
-  colB: {
-    backgroundColor: "#f5ebe0",
+  tableCell: {
+    padding: 10,
+    alignItems: "center",
+    textAlign: "center",
+    width: 80,
+    overflow: "hidden",
+    maxHeight: 40,
   },
-  colC: {
-    backgroundColor: "#e3d5ca",
+  firstCell: {
+    fontWeight: "500",
+    width: 40,
   },
-  colD: {
-    backgroundColor: "#90e0ef",
-  },
-  text: {
-    fontSize: 18,
-  },
-  headerText: {
+  tableHeader: {
     fontSize: 16,
-    fontWeight: "condensedBold",
-    color: "white",
+    fontWeight: "bold",
+    color: "#fff",
+  },
+  tableSumHeader: {
+    fontSize: 16,
+    fontWeight: "bold",
+    backgroundColor: "gray",
+    color: "#fff",
+  },
+  tableData: {
+    fontSize: 18,
+    fontWeight: "600",
+  },
+  bodyScroll: {
+    maxHeight: screenHeight,
   },
 });

@@ -1,14 +1,46 @@
-import React, { useState } from "react";
-import { Modal, View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import React, { useState, useEffect } from "react";
+import { Modal, View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from "react-native";
+import { Player } from "../../types/Player";
+import { PointRow } from "../../types/Game";
 
 type Props = {
   visible: boolean;
   onClose: () => void;
-  onSubmit: (values: number[]) => void;
+  onSubmit: (values: PointRow[]) => void;
+  players: Player[];
 };
 
-const AddPointModal: React.FC<Props> = ({ visible, onClose, onSubmit }) => {
-  const [points, setPoints] = useState(["", "", "", ""]);
+const avatarImages = [
+  require("../../../assets/avatar/user1.png"),
+  require("../../../assets/avatar/user2.png"),
+  require("../../../assets/avatar/user3.png"),
+  require("../../../assets/avatar/user4.png"),
+  require("../../../assets/avatar/user5.png"),
+  require("../../../assets/avatar/user6.png"),
+  require("../../../assets/avatar/user7.png"),
+  require("../../../assets/avatar/user8.png"),
+  require("../../../assets/avatar/user9.png"),
+];
+
+// Nice pastel background colors for player rows
+const playerRowColors = [
+  "#FDEBD0", // light orange
+  "#D6EAF8", // light blue
+  "#D5F5E3", // light green
+  "#F9E79F", // light yellow
+  "#F5CBA7", // light peach
+  "#E8DAEF", // light purple
+  "#FADBD8", // light pink
+  "#D4E6F1", // light sky blue
+  "#D1F2EB", // light teal
+];
+
+const AddPointModal: React.FC<Props> = ({ visible, onClose, onSubmit, players }) => {
+  const [points, setPoints] = useState<string[]>([]);
+
+  useEffect(() => {
+    setPoints(players.map(() => ""));
+  }, [players, visible]);
 
   const handleInputChange = (text: string, index: number) => {
     const newPoints = [...points];
@@ -17,9 +49,18 @@ const AddPointModal: React.FC<Props> = ({ visible, onClose, onSubmit }) => {
   };
 
   const handleSubmit = () => {
-    const numericPoints = points.map(p => parseInt(p, 10) || 0);
-    onSubmit(numericPoints);
-    setPoints(["", "", "", ""]);
+    // Check if all fields are filled
+    const allFilled = points.every((val) => val.trim() !== "");
+    if (!allFilled) {
+      alert("Please fill in all point fields.");
+      return;
+    }
+    const pointRows: PointRow[] = players.map((player, idx) => ({
+      playerId: player.id,
+      point: parseInt(points[idx], 10) || 0,
+    }));
+    onSubmit(pointRows);
+    setPoints(players.map(() => ""));
     onClose();
   };
 
@@ -27,17 +68,19 @@ const AddPointModal: React.FC<Props> = ({ visible, onClose, onSubmit }) => {
     <Modal transparent visible={visible} animationType="fade">
       <View style={styles.overlay}>
         <View style={styles.modal}>
-          <Text style={styles.title}>Add 4 Point Values</Text>
-
-          {points.map((val, index) => (
-            <TextInput
-              key={index}
-              placeholder={`Point ${index + 1}`}
-              keyboardType="numeric"
-              value={val}
-              onChangeText={(text) => handleInputChange(text, index)}
-              style={styles.input}
-            />
+          <Text style={styles.title}>Add Points</Text>
+          {players.map((player, index) => (
+            <View key={player.id} style={[styles.row, { backgroundColor: playerRowColors[index + (4 % playerRowColors.length)] }]}>
+              <Image source={avatarImages[player.avatar]} style={styles.avatar} />
+              <Text style={styles.name}>{player.name}</Text>
+              <TextInput
+                placeholder="Point"
+                keyboardType="numeric"
+                value={points[index]}
+                onChangeText={(text) => handleInputChange(text, index)}
+                style={styles.input}
+              />
+            </View>
           ))}
 
           <View style={styles.actions}>
@@ -62,7 +105,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modal: {
-    width: 300,
+    width: 320,
     backgroundColor: "#fff",
     padding: 20,
     borderRadius: 12,
@@ -74,12 +117,34 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     textAlign: "center",
   },
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+    borderRadius: 8,
+    paddingVertical: 6,
+    paddingHorizontal: 4,
+  },
+  avatar: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    marginRight: 10,
+    backgroundColor: "#eee",
+  },
+  name: {
+    flex: 1,
+    fontSize: 16,
+    marginRight: 10,
+  },
   input: {
+    width: 80,
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 8,
-    padding: 10,
-    marginBottom: 10,
+    padding: 8,
+    textAlign: "center",
+    backgroundColor: "#f9f9f9",
   },
   actions: {
     flexDirection: "row",
@@ -90,11 +155,15 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   submitBtn: {
-    marginLeft: 10,
+    backgroundColor: "#E9DBF8",
+    borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
   },
   btnText: {
-    color: "#007AFF",
+    color: "#3B3B98",
     fontWeight: "bold",
+    fontSize: 16,
   },
 });
 

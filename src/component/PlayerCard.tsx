@@ -1,15 +1,13 @@
 import React, { use } from "react";
 import { View, Text, StyleSheet, ImageBackground, Image } from "react-native";
 import { Dimensions } from "react-native";
+import { Player } from "../types/Player";
 
 const screenWidth = Dimensions.get("window").width;
 const cardWidth = screenWidth / 2 - 30;
 
 type PlayerCardProps = {
-  name?: string;
-  totalPoints?: number;
-  lastPoint?: number;
-  avatarName?: string;
+  player: Player;
 };
 const avatarMap: Record<string, any> = {
   user1: require("../../assets/avatar/user1.png"),
@@ -22,7 +20,10 @@ const avatarMap: Record<string, any> = {
   user8: require("../../assets/avatar/user8.png"),
   user9: require("../../assets/avatar/user9.png"),
 };
-const PlayerCard: React.FC<PlayerCardProps> = ({ name, totalPoints, lastPoint, avatarName }) => {
+const PlayerCard: React.FC<PlayerCardProps> = ({ player }) => {
+  const { name, totalPoints } = player;
+  const lastPoint = player.points?.length ? player.points[player.points.length - 1] : undefined;
+  const avatarName = player.avatar !== undefined ? `user${player.avatar + 1}` : "user1"; // Default to user1 if avatar is not set
   return (
     <ImageBackground
       source={require(`../../assets/blackcards.jpg`)} // Add a dynamic, stylish background
@@ -35,11 +36,11 @@ const PlayerCard: React.FC<PlayerCardProps> = ({ name, totalPoints, lastPoint, a
       </View>
       <View style={styles.stats}>
         <View style={styles.statBlock}>
-          <Text style={styles.statValue}>{totalPoints}</Text>
+          <Text style={styles.statValue}>{totalPoints ?? 0}</Text>
           <Text style={styles.statLabel}>Total</Text>
         </View>
         <View style={styles.statBlock}>
-          <Text style={styles.statValue}>+{lastPoint}</Text>
+          <Text style={styles.statValue}>{lastPoint ?? "---"}</Text>
           <Text style={styles.statLabel}>Last</Text>
         </View>
       </View>
@@ -52,11 +53,11 @@ const styles = StyleSheet.create({
     width: cardWidth,
     height: 250,
     borderRadius: 16,
-    borderWidth: .5,
+    borderWidth: 0.5,
     borderColor: "white",
     overflow: "hidden",
-    elevation: 5,
-    shadowColor: "white",
+    elevation: 4,
+    shadowColor: "#B39DDB",
     shadowOpacity: 0.2,
     shadowRadius: 10,
     shadowOffset: { width: 0, height: 4 },
