@@ -20,10 +20,17 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.nahian_fahim.PointGuni"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "owner": "nahian_fahim",
+    "extra": {
+      "eas": {
+        "projectId": "4e6e95e6-98c2-4a38-9775-6ad4cfce91c9"
+      }
     }
   }
 }
