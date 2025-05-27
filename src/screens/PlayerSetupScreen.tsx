@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, ScrollView, Keyboard } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import type { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../types/RootStack";
 import { Player } from "../types/Player";
@@ -43,7 +42,7 @@ const PlayerSetupScreen = ({ navigation }: PlayerSetupScreenProps) => {
         ref.scrollTo({ x: scrollToX, animated: true });
       }
     });
-  }, []); 
+  }, []);
 
   const handleNameChange = (index: number, name: string) => {
     const updated = [...temporaryPlayers];
@@ -68,12 +67,7 @@ const PlayerSetupScreen = ({ navigation }: PlayerSetupScreenProps) => {
   };
 
   return (
-    <KeyboardAwareScrollView
-      contentContainerStyle={styles.container}
-      enableOnAndroid={true}
-      extraScrollHeight={100}
-      keyboardShouldPersistTaps="handled"
-    >
+    <View>
       <Text style={styles.title}>Player Setup</Text>
       {temporaryPlayers.map((player, idx) => (
         <View key={idx} style={styles.playerBlock}>
@@ -113,7 +107,7 @@ const PlayerSetupScreen = ({ navigation }: PlayerSetupScreenProps) => {
       <TouchableOpacity style={styles.startButton} onPress={handleStart}>
         <Text style={styles.startButtonText}>Next</Text>
       </TouchableOpacity>
-    </KeyboardAwareScrollView>
+    </View>
   );
 };
 

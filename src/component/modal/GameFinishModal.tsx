@@ -3,7 +3,6 @@ import { Modal, View, Text, TouchableOpacity, StyleSheet, Image } from "react-na
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { Player } from "../../types/Player";
 import { useGameContext } from "../../context/GameContext";
-import ConfettiCannon from "react-native-confetti-cannon";
 
 type GameFinishModalProps = {
   visible: boolean;
@@ -29,9 +28,6 @@ const GameFinishModal: React.FC<GameFinishModalProps> = ({ visible, playersBelow
   return (
     <Modal visible={visible} transparent animationType="slide">
       <View style={styles.overlay}>
-        <View pointerEvents="none" style={[StyleSheet.absoluteFillObject, { zIndex: 10 }]}>
-          <ConfettiCannon count={100} origin={{ x: 180, y: 0 }} fadeOut={true} explosionSpeed={350} fallSpeed={3000} />
-        </View>
         <View style={styles.modalContent}>
           <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 16, gap: 10 }}>
             <MaterialCommunityIcons name="party-popper" size={40} color="#8E7DBE" style={styles.partyIcon} />
